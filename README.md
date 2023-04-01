@@ -283,7 +283,7 @@ In the first example, we simply take it from an array and make it repeat indefin
 , (sequence, time) -> sequence[1 + time::UInt64 % length(sequence)] AS sequencer
 ```
 
-But the obvious way to generate a melody is to take a Sierpinski triangle.
+But the obvious way to generate a melody is to take a [Sierpinski triangle](https://en.wikipedia.org/wiki/Sierpi%C5%84ski_triangle).
 
 Sierpinski triangles sound delicious:
 ```
@@ -321,7 +321,7 @@ white_noise(time) * running_envelope(120, time, 0.5, 0.01, 0.01, 0.05) AS snare,
 
 Let's also define five melodies. 
 
-What is the idea? Let's take a Sierpinski triangle, put it into a sine wave, add FM to make it even fancier, and apply a few LFOs over the place.
+What is the idea? Let's take a [Sierpinski triangle](https://www.youtube.com/watch?v=IZHiBJGcrqI), put it into a sine wave, add FM to make it even fancier, and apply a few LFOs over the place.
 
 ```
 sine_wave(
@@ -420,3 +420,4 @@ If you want to share new interesting examples, please make a pull request, addin
 - [Color of Noise](https://en.wikipedia.org/wiki/Colors_of_noise);
 - [Glitchmachine](https://www.youtube.com/watch?v=adoF2Lc70J8);
 - [Audio Synthesis](https://www.youtube.com/watch?v=F1RsE4J9k9w);
+- [44,100 Hz](https://en.wikipedia.org/wiki/44,100_Hz)
