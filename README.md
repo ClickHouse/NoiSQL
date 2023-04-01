@@ -7,25 +7,48 @@ Sometimes it can generate something nice, but usually not.
 
 # Quick Start
 
-Install clickhouse-local:
+Download clickhouse-local:
 ```
 curl https://clickhouse.com/ | sh
+```
+
+Install (Linux):
+```
 sudo ./clickhouse install
+```
+
+Install (macOS):
+```
+mkdir -p bin
+mv clickhouse bin/clickhouse-local
+export PATH="$(pwd)/bin:$PATH"
+echo 'export PATH="'$(pwd)'/bin:$PATH"' >> .profile
+```
+
+Check the installation:
+```
 clickhouse-local --version
 ```
 
-Demo:
+Demo (Linux):
 ```
 ./music2.sql.sh | aplay -f cd
 ```
 
-Live editing:
+Demo (macOS):
+```
+brew install sox
+./music2.sql.sh | play -t raw -b 16 -e signed -c 2 -r 44100 -v .75 -
+```
+
+Live editing (Linux):
 ```
 sudo apt install inotifytools
 ./play.sh music0.sql
 ```
+You can edit the `music0.sql` file, and the changes will automatically apply while playing.
 
-Examples:
+# Examples
 
 https://user-images.githubusercontent.com/18581488/229301700-d71d5a9c-ad7e-492b-80ba-d49114fd0bfe.mp4
 
