@@ -152,7 +152,7 @@ The sine wave gives the most clean and boring sound.
 , time -> sin(time * 2 * pi()) AS sine_wave
 ```
 
-The square wave gives a very harsh sound, it can be imagined as a maximally-distorted sine wave.
+The [square wave](https://en.wikipedia.org/wiki/Square_wave) gives a very harsh sound, it can be imagined as a maximally-distorted sine wave.
 ``` 
 , time -> time::UInt64 % 2 * 2 - 1 AS square_wave
 ```
@@ -396,6 +396,8 @@ You can use ClickHouse as a vocoder. Just provide the microphone input signal in
 
 You can make the queries parameterized, replacing all the hundreds of constants with parameters. Then attach a device with hundreds of knobs and faders to your PC and provide the values of them as a streaming input table. Then you can control your sound like a pro. 
 
+Realtime video generation can be added as well.
+
 
 ## Motivation
 
@@ -407,3 +409,12 @@ There is not much sense in this project, although it can facilitate testing Clic
 ## Contributing
 
 If you want to share new interesting examples, please make a pull request, adding them directly to this repository!
+
+
+## Reading Corner
+
+- [Sound](https://ciechanow.ski/sound/) by Bartosz Ciechanowski;
+- [Bytebeat](https://www.youtube.com/watch?v=tCRPUv8V22o);
+- [Color of Noise](https://en.wikipedia.org/wiki/Colors_of_noise);
+- [Glitchmachine](https://www.youtube.com/watch?v=adoF2Lc70J8);
+- [Audio Synthesis](https://www.youtube.com/watch?v=F1RsE4J9k9w);
