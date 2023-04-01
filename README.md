@@ -2,7 +2,7 @@
 
 NoiSQL (named after [Robert Noyce](https://en.wikipedia.org/wiki/Robert_Noyce)) shows how to play sound and music with declarative SQL queries.
 
-It contains oscillators for basic waves, envelopes, sequencers, arpeggiators, effects (distortion, delay), noice generators, AM and FM, LFO, ...
+It contains oscillators for basic waves, envelopes, sequencers, arpeggiators, effects (distortion, delay), noise generators, AM and FM, LFO, ...
 Sometimes it can generate something nice, but usually not. 
 
 # Quick Start
