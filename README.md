@@ -34,7 +34,7 @@ The CD (Compact Disc) format is a 44100 Hz 16-bit stereo PCM signal.
 - **16 bit** is the precision of every value, and the value is represented by `Int16` (signed, two's complement, little endian) integer; 
 - **stereo** means that we have two values at every sample - for the left channel and for the right channel;
 
-The signal is represented in binary, corresponding to the ClickHouse's `RowBinary` format. Therefore, the bit rate of the signal is 16 * 2 * 44100 = 1411 KBit.
+The signal is represented in binary, corresponding to the ClickHouse's `RowBinary` format. Therefore, the bit rate of the signal is 16 * 2 * 44100 = 1411 kBit.
 
 Although we could also use the classic 8-bit mono 9 kHz format, the CD format gives more possibilities. 
 
