@@ -330,9 +330,27 @@ mono(output(
 FROM table;
 ```
 
+
+## Limitations
+
+I didn't find a good way to implement filters (low-pass, high-pass, band-pass, etc). It does not have Fourier transform, and we cannot operate on frequency domain. Although moving average can suffice as a simple filter.
+
+
+## Further Directions
+
+You can use ClickHouse as a sampler - storing the prepared musical samples in the table, and arranging them with SELECT queries. For example, the [Mod Archive](https://modarchive.org/) can help.
+
+You can use ClickHouse as a vocoder. Just provide the microphone input signal instead of the `system.numbers` as a table to `clickhouse-local`.
+
+You can make the queries parameterized, replacing all the hundreds of constants with parameters. Then attach a device with hundreds of knobs and faders to your PC and provide the values of them as a streaming input table. Then you can control your sound like a pro. 
+
+
 ## Motivation
 
+This is a fun project, and this neither a good nor convenient solution for a problem. Better solutions exist. 
+
 There is not much sense in this project, although it can facilitate testing ClickHouse.
+
 
 ## Contributing
 
