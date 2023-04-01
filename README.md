@@ -95,6 +95,10 @@ A knob for the volume:
 If the signal exceeds the boundaries, it will be clipped:
 ```
 , level -> least(1.0, greatest(-1.0, level)) AS clamp
+```
+
+Floating point values are converted to Int16 for the output:
+```
 , level -> (clamp(level) * 0x7FFF * master_volume)::Int16 AS output
 ```
 
@@ -105,7 +109,7 @@ If we don't care about stereo - we can simply output a tuple (pair) of identical
 
 ### Basic waves
 
-Oscillators: functions of time, with period adjusted to be one second.
+We define oscillators as functions of time, with period adjusted to be one second.
 You can modify the frequency simply by multiplying the time argument.
 For example, `sine_wave(time * 400)` - a sine wave of 400 Hz frequency.
 
@@ -281,7 +285,10 @@ Here is a snare:
 white_noise(time) * running_envelope(120, time, 0.5, 0.01, 0.01, 0.05) AS snare,
 ```
 
-Let's also define five melodies:
+Let's also define five melodies. 
+
+What is the idea? Let's take a Sierpinski triangle, put it into a sine wave, add FM to make it even fancier, and apply a few LFO over the place.
+
 ```
 sine_wave(
     time * (100 * exp2(trailing_zero_bits(time * 8) % 12 / 6))
