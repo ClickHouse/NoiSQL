@@ -329,3 +329,11 @@ mono(output(
 
 FROM table;
 ```
+
+## Motivation
+
+There is not much sense in this project, although it can facilitate testing ClickHouse.
+
+## Contributing
+
+If you want to share new interesting examples, please make a pull request, adding them directly to this repository!
