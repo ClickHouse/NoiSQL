@@ -1,5 +1,20 @@
 #!/bin/sh
 
+# sudo apt install inotifytools
+#
+# This script implements live reload of musical queries.
+#
+# Run it as
+#   ./play.sh music0.sql
+#
+# It will start playing and watch for the changes in the file.
+# When the file is changed, it reloads and continues playing
+# from about the same moment (preserving the time counter).
+#
+# This enables live performance environment :)
+# You open an SQL query in your favorite text editor,
+# edit and save it, listening to the updates immediately.
+
 MUSIC="$1"
 
 PIPE=$(mktemp -u)

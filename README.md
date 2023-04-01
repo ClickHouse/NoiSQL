@@ -1,2 +1,1 @@
-# NoiSQL
-NoiSQL — Generating Music With SQL Queries
+# NoiSQL — Generating Music With SQL Queries

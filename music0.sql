@@ -35,9 +35,6 @@ WITH
 , (time, wave, amount) -> (time - floor(time) < (1 - amount)) ? wave(time * (1 - amount)) : 0 AS thin
 , (time, wave, amount) -> wave(floor(time) + pow(time - floor(time), amount)) AS skew
 
--- Combining
-, (a, b, weight) -> a * (1 - weight) + b * weight AS combine
-
 -- Envelopes
 , (time, offset, attack, hold, release) ->
        time < offset ? 0
