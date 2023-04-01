@@ -1,3 +1,6 @@
+#!/usr/bin/env -S clickhouse-local --max_block_size 441000 --allow_experimental_analyzer 1 --format RowBinary --queries-file
+# Usage: ./music2.sql.sh | aplay -f cd
+
 WITH
 
 -- Input
@@ -65,4 +68,4 @@ mono(output(
         * sine_wave(time * 80 * exp2(x / 3)),
         range(12))))
 
-FROM table;
+FROM system.numbers;
