@@ -187,7 +187,7 @@ Here is a discrete version of an LFO. It allows to change the signal as step fun
 , (from, to, steps, time) -> from + floor((time - floor(time)) * steps) / steps * (to - from) AS step_lfo
 ```
 
-For some unknown reason, the frequencies of musical notes ("musical scale") are exponentially distributed, so sometimes we have to apply computations in the logarithmic coordinates to make a more pleasant sound:
+For some unknown reason, the frequencies of musical notes ("musical scale") are exponentially distributed, so sometimes we have to apply computations in the [logarithmic coordinates](https://en.wikipedia.org/wiki/Curvilinear_coordinates) to make a more pleasant sound:
 ```
 , (from, to, steps, time) -> exp(step_lfo(log(from), log(to), steps, time)) AS exp_step_lfo
 ```
