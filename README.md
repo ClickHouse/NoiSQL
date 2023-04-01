@@ -25,11 +25,22 @@ sudo apt install inotifytools
 ./play.sh music0.sql
 ```
 
+Examples:
+
+https://user-images.githubusercontent.com/18581488/229301700-d71d5a9c-ad7e-492b-80ba-d49114fd0bfe.mp4
+
+https://user-images.githubusercontent.com/18581488/229301704-d82d89b7-7650-44eb-a525-0630888d2080.mp4
+
+https://user-images.githubusercontent.com/18581488/229301706-8e14b0c1-01a9-47a5-84dd-8a069832e63f.mp4
+
+https://user-images.githubusercontent.com/18581488/229301709-9a102865-be02-4072-8707-48a6a571c500.mp4
+
+
 # How It Works
 
 An SQL query selects from the `system.numbers` table, containing a sequence of natural numbers, and transforms this sequence into a PCM audio signal in the CD format. This output signal is piped to the `aplay -f cd` tool (on Linux) to play it.
 
-The CD (Compact Disc) format is a 44100 Hz 16-bit stereo PCM signal.
+The CD (Compact Disc Audio) format is a 44100 Hz 16-bit stereo PCM signal.
 - **44100 Hz** is the "sampling frequency", meaning that the signal has a value 44 100 times every second;
 - **16 bit** is the precision of every value, and the value is represented by `Int16` (signed, two's complement, little endian) integer; 
 - **stereo** means that we have two values at every sample - for the left channel and for the right channel;
@@ -330,6 +341,24 @@ mono(output(
 FROM table;
 ```
 
+### Additional Commands
+
+Generate five minutes of audio and write to a `.pcm` file:
+```
+clickhouse-local --format RowBinary --query "SELECT * FROM system.numbers LIMIT 44100 * 5 * 60" \
+ | clickhouse-local --allow_experimental_analyzer 1 --format RowBinary --structure "number UInt64" --queries-file music0.sql \
+> music0.pcm
+```
+
+Convert `pcm` to `wav`:
+```
+ffmpeg -f s16le -ar 44.1k -ac 2 -i music0.pcm music0.wav
+```
+
+Convert `pcm` to `mp4`:
+```
+ffmpeg -f s16le -ar 44.1k -ac 2 -i music0.pcm music0.mp4
+```
 
 ## Limitations
 
