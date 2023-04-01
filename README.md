@@ -333,7 +333,7 @@ FROM table;
 
 ## Limitations
 
-I didn't find a good way to implement filters (low-pass, high-pass, band-pass, etc). It does not have Fourier transform, and we cannot operate on frequency domain. Although moving average can suffice as a simple filter.
+I didn't find a good way to implement filters (low-pass, high-pass, band-pass, etc). It does not have Fourier transform, and we cannot operate on the frequency domain. Although moving average can suffice as a simple filter.
 
 
 ## Further Directions
@@ -347,7 +347,7 @@ You can make the queries parameterized, replacing all the hundreds of constants 
 
 ## Motivation
 
-This is a fun project, and this neither a good nor convenient solution for a problem. Better solutions exist. 
+This is a fun project, and neither a good nor convenient solution for a problem. Better solutions exist. 
 
 There is not much sense in this project, although it can facilitate testing ClickHouse.
 
