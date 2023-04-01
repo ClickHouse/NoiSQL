@@ -64,7 +64,7 @@ It will give you uninteresting waves.
 
 # Something Interesting
 
-Here is a query from `music0.sql`, that generates something at least listenable. Let's walk through this SQL query.
+Here is a query from [music0.sql](music0.sql), that generates something at least listenable. Let's walk through this SQL query.
 
 The WITH clause in the SQL query allows to define expressions for further use.
 We can define both constants and functions (in form of lambda expressions).
@@ -72,7 +72,7 @@ We use the `allow_experimental_analyzer` setting to make this query possible.
 
 ### Input
 
-Let's define the `time` column to be floating point value, where 1.0 means one second.
+Let's define the `time` column to be floating point value, representing the number of seconds.
 
 ```
 WITH
@@ -84,7 +84,7 @@ WITH
 
 ### Output Control
 
-Let us work with the signal in floating point format, changing in the `[-1, 1]` range.
+Let us work with the signal in the floating point format, with values in the `[-1, 1]` range.
 Here are the functions to convert it to the output PCM CD signal.
 
 A knob for the volume:
