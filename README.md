@@ -420,4 +420,4 @@ If you want to share new interesting examples, please make a pull request, addin
 - [Color of Noise](https://en.wikipedia.org/wiki/Colors_of_noise);
 - [Glitchmachine](https://www.youtube.com/watch?v=adoF2Lc70J8);
 - [Audio Synthesis](https://www.youtube.com/watch?v=F1RsE4J9k9w);
-- [44,100 Hz](https://en.wikipedia.org/wiki/44,100_Hz)
+- [44,100 Hz](https://en.wikipedia.org/wiki/44,100_Hz);
