@@ -2,7 +2,7 @@
 
 NoiSQL (named after [Robert Noyce](https://en.wikipedia.org/wiki/Robert_Noyce)) shows how to play sound and music with declarative SQL queries.
 
-It contains oscillators for basic waves, envelopes, sequencers, arpeggiators, effects (distortion, delay), noise generators, AM and FM, LFO, ...
+It contains oscillators for basic waves, envelopes, sequencers, arpeggiators, effects (distortion, delay), noise generators, AM and FM, and LFO, ...
 Sometimes it can generate something nice, but usually not. 
 
 # Quick Start
@@ -82,7 +82,7 @@ clickhouse-local --query "
     FORMAT RowBinary" | aplay -f cd
 ```
 
-It will give you uninteresting clicky sound.
+It will give you an uninteresting clicky sound.
 
 ```
 clickhouse-local --query "
@@ -100,13 +100,13 @@ It will give you uninteresting waves.
 
 Here is a query from [music0.sql](music0.sql), that generates something at least listenable. Let's walk through this SQL query.
 
-The WITH clause in the SQL query allows to define expressions for further use.
+The WITH clause in the SQL query allows defining expressions for further use.
 We can define both constants and functions (in form of lambda expressions).
 We use the `allow_experimental_analyzer` setting to make this query possible.
 
 ### Input
 
-Let's define the `time` column to be floating point value, representing the number of seconds.
+Let's define the `time` column to be a floating point value representing the number of seconds.
 
 ```
 WITH
@@ -143,16 +143,16 @@ If we don't care about stereo - we can simply output a tuple (pair) of identical
 
 ### Basic waves
 
-We define oscillators as functions of time, with period adjusted to be one second.
+We define oscillators as functions of time, with the period adjusted to be one second.
 You can modify the frequency simply by multiplying the time argument.
 For example, `sine_wave(time * 400)` - a sine wave of 400 Hz frequency.
 
-The sine wave gives the most clean and boring sound.
+The sine wave gives the cleanest and most boring sound.
 ```
 , time -> sin(time * 2 * pi()) AS sine_wave
 ```
 
-The [square wave](https://en.wikipedia.org/wiki/Square_wave) gives a very harsh sound, it can be imagined as a maximally-distorted sine wave.
+The [square wave](https://en.wikipedia.org/wiki/Square_wave) gives a very harsh sound; it can be imagined as a maximally-distorted sine wave.
 ``` 
 , time -> time::UInt64 % 2 * 2 - 1 AS square_wave
 ```
@@ -169,20 +169,20 @@ Triangle wave
 
 ### Helpers and LFO
 
-LFO means "Low Frequency Oscillation" and it is used to control a parameter of one signal with another low-frequency signal.
-It can give multiple interesting effects. 
+LFO means "Low-Frequency Oscillation," and it is used to control a parameter of one signal with another low-frequency signal.
+It can have multiple interesting effects. 
 
-For example, AM - amplitude modulation is modulating a volume of one signal with another signal, and it will give a tremble effect, making your sine waves sounding more natural.
+For example, AM - amplitude modulation is modulating the volume of one signal with another signal, and it will give a trembling effect, making your sine waves sound more natural.
 
-Another example, FM - frequency modulation is making a frequency of one signal to change with another frequency.
-See [the explanation](https://www.youtube.com/watch?v=vvBl3YUBUyY)
+Another example, FM - frequency modulation, is making the frequency of one signal change with another frequency.
+See [the explanation](https://www.youtube.com/watch?v=vvBl3YUBUyY).
 
 We take the wave and map it to the `[from, to]` interval:
 ```
 , (from, to, wave, time) -> from + ((wave(time) + 1) / 2) * (to - from) AS lfo
 ```
 
-Here is a discrete version of an LFO. It allows to change the signal as step function:
+Here is a discrete version of an LFO. It allows changing the signal as a step function:
 ```
 , (from, to, steps, time) -> from + floor((time - floor(time)) * steps) / steps * (to - from) AS step_lfo
 ```
@@ -194,12 +194,12 @@ For some unknown reason, the frequencies of musical notes ("musical scale") are 
 
 ### Noise
 
-Generating noise is easy, we just need random numbers.
+Generating noise is easy. We just need random numbers.
 
 But we want the noise to be deterministic (determined by the time) for further processing.
-That's why we use `cityHash64` instead of a random, and `erf` instead of `randNormal`.
+That's why we use `cityHash64` instead of a random and `erf` instead of `randNormal`.
 
-In fact, all the following are variants of white noise. Although we can also generate brown noise with the help of `runningAccumulate`.
+All the following are variants of white noise. Although we can also generate [brown noise](https://en.wikipedia.org/wiki/Brownian_noise) with the help of `runningAccumulate`.
 
 ``` 
 , time -> cityHash64(time) / 0xFFFFFFFFFFFFFFFF AS uniform_noise
@@ -209,21 +209,21 @@ In fact, all the following are variants of white noise. Although we can also gen
 
 ### Distortion
 
-Distortion alters the signal in various ways, to make it sound less boring.
+Distortion alters the signal in various ways to make it sound less boring.
 
-The most harsh distortion amplifies the signal, then clips what's above the range.
-It adds higher harmonics, and makes sound more metallic, and makes sine waves more square.
+The harshest distortion - clipping - amplifies the signal, then clips what's above the range.
+It adds higher harmonics and makes sound more metallic, and makes sine waves more square.
 ```
 , (x, amount) -> clamp(x * amount) AS clipping
 ```
 
-For a milder version, it makes sense to apply `pow` function, such as square root to the `[-1, 1]` signal:
+For a milder version, it makes sense to apply the `pow` function, such as square root to the `[-1, 1]` signal:
 ```
 , (x, amount) -> clamp(x > 0 ? pow(x, amount) : -pow(-x, amount)) AS power_distortion
 ```
 
 We can reduce the number of bits in the values of the signal, making it more coarse.
-It adds some sort of noise, making it sound worn-out.
+It adds some sort of noise, making it sound worn out.
 ```
 , (x, amount) -> round(x * exp2(amount)) / exp2(amount) AS bitcrush
 ```
@@ -245,11 +245,11 @@ Skewing the waves in time making sine ways more similar to sawtooth waves:
 
 ### Envelopes
 
-Envelope is a way to make the signal sound like a note of a keyboard musical instrument, such as piano.
+The envelope is a way to make the signal sound like a note of a keyboard musical instrument, such as a piano.
 
 It modulates the volume of the signal by:
 - attack - time for the sound to appear;
-- hold - time for the sound to play in maximum volume; 
+- hold - time for the sound to play at maximum volume; 
 - release - time for the sound to decay to zero;
 
 This is a simplification of what typical envelopes are, but it's good enough.
@@ -262,7 +262,7 @@ This is a simplification of what typical envelopes are, but it's good enough.
     : 0))) AS envelope
 ```
 
-We can make the musical note to sound periodically, to define a rhythm.
+We can make the musical note sound periodically to define a rhythm.
 For convenience, we define "bpm" as "beats per minute" and make it sound once in every beat.
 ```
 , (bpm, time, offset, attack, hold, release) ->
@@ -295,14 +295,14 @@ Another way is to map the number of bits in a number to a musical note:
 , time -> bitCount(time::UInt64) AS bit_count
 ```
 
-Calculating the number of trailing zero bits give us a nice arpeggiator:
+Calculating the number of trailing zero bits gives us a nice arpeggiator:
 ```
 , time -> log2(time::UInt64 > 0 ? bitXor(time::UInt64, time::UInt64 - 1) : 1) AS trailing_zero_bits
 ```
 
 ### Delay
 
-If you ever wanted to generate a dub music, you cannot go without a delay effect:
+If you ever wanted to generate dub music, you cannot go without a delay effect:
 ```
 , (time, wave, delay, decay, count) -> arraySum(n -> wave(time - delay * n) * pow(decay, n), range(count)) AS delay
 ```
@@ -321,7 +321,7 @@ white_noise(time) * running_envelope(120, time, 0.5, 0.01, 0.01, 0.05) AS snare,
 
 Let's also define five melodies. 
 
-What is the idea? Let's take a Sierpinski triangle, put it into a sine wave, add FM to make it even fancier, and apply a few LFO over the place.
+What is the idea? Let's take a Sierpinski triangle, put it into a sine wave, add FM to make it even fancier, and apply a few LFOs over the place.
 
 ```
 sine_wave(
@@ -347,7 +347,7 @@ sine_wave(time * (800 / exp2(trailing_zero_bits(time * 8) % 12 / 6))
     ) AS melody4
 ```
 
-### Combine It Together
+### Combine It
 
 So, what will happen if we mix together some garbage and listen to it?
 ```
@@ -385,25 +385,27 @@ ffmpeg -f s16le -ar 44.1k -ac 2 -i music0.pcm music0.mp4
 
 ## Limitations
 
-I didn't find a good way to implement filters (low-pass, high-pass, band-pass, etc). It does not have Fourier transform, and we cannot operate on the frequency domain. Although moving average can suffice as a simple filter.
+I didn't find a good way to implement filters (low-pass, high-pass, band-pass, etc.). It does not have Fourier transform, and we cannot operate on the frequency domain. However, the moving average can suffice as a simple filter.
 
 
 ## Further Directions
 
-You can use ClickHouse as a sampler - storing the prepared musical samples in the table, and arranging them with SELECT queries. For example, the [Mod Archive](https://modarchive.org/) can help.
+You can use ClickHouse as a sampler - storing the prepared musical samples in the table and arranging them with SELECT queries. For example, the [Mod Archive](https://modarchive.org/) can help.
 
 You can use ClickHouse as a vocoder. Just provide the microphone input signal instead of the `system.numbers` as a table to `clickhouse-local`.
 
-You can make the queries parameterized, replacing all the hundreds of constants with parameters. Then attach a device with hundreds of knobs and faders to your PC and provide the values of them as a streaming input table. Then you can control your sound like a pro. 
+You can make the queries parameterized, replacing all the hundreds of constants with parameters. Then attach a device with hundreds of knobs and faders to your PC and provide their values of them as a streaming input table. Then you can control your sound like a pro. 
 
-Realtime video generation can be added as well.
+Real-time video generation can be added as well.
 
 
 ## Motivation
 
-This is a fun project, and neither a good nor convenient solution for a problem. Better solutions exist. 
+This is a fun project and neither a good nor convenient solution to a problem. Better solutions exist. 
 
 There is not much sense in this project, although it can facilitate testing ClickHouse.
+
+You could argue that modern AI, for example, [Riffusion](https://www.riffusion.com/), can do a better job. The counterargument is - if you enjoy what you are doing, it's better not to care if someone does it better but with less pleasure.
 
 
 ## Contributing
