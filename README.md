@@ -5,7 +5,34 @@ NoiSQL (named after [Robert Noyce](https://en.wikipedia.org/wiki/Robert_Noyce)) 
 It contains oscillators for basic waves, envelopes, sequencers, arpeggiators, effects (distortion, delay), noise generators, AM and FM, and LFO, ...
 Sometimes it can generate something nice, but usually not. 
 
-# Quick Start
+# Table of Contents
+- [NoiSQL — Generating Music With SQL Queries](#noisql---generating-music-with-sql-queries)
+  * [Quick Start - Linux](#quick-start---linux)
+  * [Quick Start - MacOS](#quick-start---macos)
+  * [Bleeps and Bloops - a demonstration](#bleeps-and-bloops---a-demonstration)
+  * [Examples](#examples)
+- [How It Works](#how-it-works)
+  * [Making Something Interesting](#making-something-interesting)
+    + [Input](#input)
+    + [Output Control](#output-control)
+    + [Basic waves](#basic-waves)
+    + [Helpers and LFO](#helpers-and-lfo)
+    + [Noise](#noise)
+    + [Distortion](#distortion)
+    + [Envelopes](#envelopes)
+    + [Sequencers](#sequencers)
+    + [Delay](#delay)
+    + [Components](#components)
+    + [Combine It](#combine-it)
+    + [Additional Commands](#additional-commands)
+  * [Limitations](#limitations)
+  * [Further Directions](#further-directions)
+- [Motivation](#motivation)
+- [Contributing](#contributing)
+  * [Reading Corner](#reading-corner)
+
+## Quick Start - Linux
+Clone the Repository.
 
 Download clickhouse-local:
 ```
@@ -17,18 +44,39 @@ Install (Linux):
 sudo ./clickhouse install
 ```
 
-Install (macOS):
-```
-mkdir -p bin
-mv clickhouse bin/clickhouse-local
-export PATH="$(pwd)/bin:$PATH"
-echo 'export PATH="'$(pwd)'/bin:$PATH"' >> .profile
-```
-
 Check the installation:
 ```
 clickhouse-local --version
 ```
+
+## Quick Start - MacOS
+Before beginning, please ensure that you have [homebrew](https://brew.sh/) installed.
+
+Clone the Repository.
+
+Change to the Repository folder (i.e. `cd NoiSQL`)
+
+Install ClickHouse (macOS):
+```
+mkdir -p bin
+mv clickhouse bin/clickhouse-local
+export PATH="$(pwd)/bin:$PATH"
+```
+
+*NOTE: If you want this to live past a terminal restart add to your profile. That may look something like the below or `.bash_profile` or `.zshrc` depending on your terminal of choice.*
+
+```
+echo 'export PATH="'$(pwd)'/bin:$PATH"' >> .profile
+```
+
+In order to playback audio from the terminal (via STDIN) we use an open source project (with a convenient brew recipe) called 'sox'
+
+```
+brew install sox
+```
+
+## Bleeps and Bloops - a demonstration
+Now, ClickHouse Local is setup and it is time to make our first noises.
 
 Demo (Linux):
 ```
@@ -37,7 +85,6 @@ Demo (Linux):
 
 Demo (macOS):
 ```
-brew install sox
 ./music2.sql.sh | play -t raw -b 16 -e signed -c 2 -r 44100 -v .75 -
 ```
 
@@ -46,9 +93,11 @@ Live editing (Linux):
 sudo apt install inotifytools
 ./play.sh music0.sql
 ```
-You can edit the `music0.sql` file, and the changes will automatically apply while playing.
 
-# Examples
+You can edit the `music0.sql` file, and the changes will automatically apply while playing. On macOS this is not possible due to the lack of inotifytools BUT the play script can be used to play any of the samples music*.sql files provided
+
+## Examples
+If, you are unable to use it yourself. You can still hear the output as .mp4 here.
 
 https://user-images.githubusercontent.com/18581488/229301700-d71d5a9c-ad7e-492b-80ba-d49114fd0bfe.mp4
 
@@ -58,7 +107,7 @@ https://user-images.githubusercontent.com/18581488/229301706-8e14b0c1-01a9-47a5-
 
 https://user-images.githubusercontent.com/18581488/229301709-9a102865-be02-4072-8707-48a6a571c500.mp4
 
-
+--------------------------
 # How It Works
 
 An SQL query selects from the `system.numbers` table, containing a sequence of natural numbers, and transforms this sequence into a PCM audio signal in the CD format. This output signal is piped to the `aplay -f cd` tool (on Linux) to play it.
@@ -96,7 +145,7 @@ clickhouse-local --query "
 
 It will give you uninteresting waves.
 
-# Something Interesting
+## Making Something Interesting
 
 Here is a query from [music0.sql](music0.sql), that generates something at least listenable. Let's walk through this SQL query.
 
@@ -385,8 +434,7 @@ ffmpeg -f s16le -ar 44.1k -ac 2 -i music0.pcm music0.mp4
 
 ## Limitations
 
-I didn't find a good way to implement filters (low-pass, high-pass, band-pass, etc.). It does not have Fourier transform, and we cannot operate on the frequency domain. However, the moving average can suffice as a simple filter.
-
+I haven't, yet, found a good way to implement filters (low-pass, high-pass, band-pass, etc.). It does not have Fourier transform, and we cannot operate on the frequency domain. However, the moving average can suffice as a simple filter.
 
 ## Further Directions
 
@@ -398,8 +446,7 @@ You can make the queries parameterized, replacing all the hundreds of constants 
 
 Real-time video generation can be added as well.
 
-
-## Motivation
+# Motivation
 
 This is a fun project and neither a good nor convenient solution to a problem. Better solutions exist. 
 
@@ -407,8 +454,7 @@ There is not much sense in this project, although it can facilitate testing Clic
 
 You could argue that modern AI, for example, [Riffusion](https://www.riffusion.com/), can do a better job. The counterargument is - if you enjoy what you are doing, it's better not to care if someone does it better but with less pleasure.
 
-
-## Contributing
+# Contributing
 
 If you want to share new interesting examples, please make a pull request, adding them directly to this repository!
 
