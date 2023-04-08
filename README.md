@@ -59,6 +59,7 @@ Change to the Repository folder (i.e. `cd NoiSQL`)
 Install ClickHouse (macOS):
 ```
 mkdir -p bin
+curl https://clickhouse.com/ | sh
 mv clickhouse bin/clickhouse-local
 export PATH="$(pwd)/bin:$PATH"
 ```
