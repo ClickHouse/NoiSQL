@@ -70,7 +70,7 @@ export PATH="$(pwd)/bin:$PATH"
 echo 'export PATH="'$(pwd)'/bin:$PATH"' >> .profile
 ```
 
-In order to playback audio from the terminal (via STDIN) we use an open source project (with a convenient brew recipe) called 'sox'
+In order to playback audio from the terminal (via STDIN) we use an open source project (with a convenient brew recipe) called 'sox' (note that Xcode developer tools is a dependency, and if you don't have it installed, you will need to install it first via `xcode-select --install`)
 
 ```
 brew install sox
