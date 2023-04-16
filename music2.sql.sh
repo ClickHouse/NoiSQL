@@ -68,4 +68,5 @@ mono(output(
         * sine_wave(time * 80 * exp2(x / 3)),
         range(12))))
 
-FROM system.numbers;
+FROM system.numbers
+SETTINGS max_threads = 1;
