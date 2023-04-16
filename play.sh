@@ -26,11 +26,11 @@ then
     exec 3<>$PIPE
     rm $PIPE
 
-    clickhouse-local --format RowBinary --query "SELECT number FROM system.numbers" >&3 &
+    clickhouse-local --format RowBinary --max_threads 1 --query "SELECT number FROM system.numbers" >&3 &
 
     while true
     do
-        clickhouse-local --allow_experimental_analyzer 1 --format RowBinary --structure "number UInt64" --query "$(cat $MUSIC)" <&3 | aplay -f cd &
+        clickhouse-local --allow_experimental_analyzer 1 --format RowBinary --max_threads 1 --structure "number UInt64" --query "$(cat $MUSIC)" <&3 | aplay -f cd &
         PID=$!
         inotifywait -e modify $MUSIC
         echo "Music changed." >&2
@@ -40,7 +40,7 @@ then
 else
     # Fallback to a simple option:
 
-    clickhouse-local --format RowBinary --query "SELECT number FROM system.numbers" | \
-        clickhouse-local --allow_experimental_analyzer 1 --format RowBinary --structure "number UInt64" --query "$(cat $MUSIC)" | \
+    clickhouse-local --format RowBinary --max_threads 1 --query "SELECT number FROM system.numbers" | \
+        clickhouse-local --allow_experimental_analyzer 1 --format RowBinary --max_threads 1 --structure "number UInt64" --query "$(cat $MUSIC)" | \
         play -t raw -b 16 -e signed -c 2 -v .75 -r 44100 -
 fi
